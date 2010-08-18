@@ -1,7 +1,7 @@
 {
   "name": "reparse",
   "description": "A parser combinator library like Haskell's Parsec.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Ben Weaver <ben@orangesoda.net>",
   "contributors": [],
   "dependencies": {},
