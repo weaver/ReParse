@@ -1,13 +1,12 @@
 # ReParse #
 
-ReParse is a parser combinator library for Javascript like [Parsec][1]
-for Haskell.
+ReParse is a parser combinator library for Javascript like Haskell's
+[Parsec](http://legacy.cs.uu.nl/daan/parsec.html).
 
 ## Installation ##
 
-Download `lib/reparse.js` and add it to your project.
-
-[1]: http://legacy.cs.uu.nl/daan/parsec.html
+Download `lib/reparse.js` and add it to your project or use `npm
+install reparse`.
 
 ## API ##
 
@@ -154,6 +153,35 @@ terminated by `sep`.
 Return an array of one or more values produced by `method`.  Each
 value is separated by `sep` and the entire sequence is optionally
 terminated by `sep`.
+
+#### .chainl(method, op, otherwise) ####
+
+Parse zero or more values produced by `method` and separated by `op`.
+Returns a value obtained by left associative application of functions
+returned by `op`.  This can be used to eliminate direct
+left-recursion.
+
+#### .chainl1(method, op, otherwise) ####
+
+Like `.chainl`, but at least one value must be produced by `method`.
+For example, this grammar:
+
+    expr   ::= expr '+' term | term
+    term   ::= term '*' factor | factor
+
+Might be implemented like this (see `examples/calc.js`):
+
+    function expr() {
+      return this.chainl1(term, addop);
+    }
+
+    function term() {
+      return this.chainl1(factor, mulop);
+    }
+
+    function factor() {
+      ...
+    }
 
 ## Compatibility ##
 

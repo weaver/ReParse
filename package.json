@@ -1,0 +1,14 @@
+{
+  "name": "reparse",
+  "description": "A parser combinator library like Haskell's Parsec.",
+  "version": "0.1.0",
+  "author": "Ben Weaver <ben@orangesoda.net>",
+  "contributors": [],
+  "dependencies": {},
+  "keywords": ["parse", "parser", "combinator", "regexp", "regular", "expression"],
+  "directories": { "lib": "./lib" },
+  "main": "./lib/reparse",
+  "scripts": {},
+  "bin": {},
+  "engines": { "node": ">= 0.1.103" }
+}
