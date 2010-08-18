@@ -45,13 +45,7 @@ example:
     }
 
     function number() {
-      return iPart(this.match(/^\d+/));
-    }
-
-    function iPart(digits) {
-      for (var i = 0, l = digits.length, r = 0; i < l; i++)
-        r = r * 10 + digits.charCodeAt(i) - 48;
-      return r;
+      return parseInt(this.match(/^\d+/));
     }
 
 ReParse indicates failure internally using exceptions, so it's safe to

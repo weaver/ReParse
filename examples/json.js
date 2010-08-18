@@ -12,6 +12,10 @@ function parse(data) {
   return (new ReParse(data, true)).start(value);
 }
 
+function value() {
+  return this.choice(literal, string, number, array, object);
+}
+
 function object() {
   return this.between(/^\{/, /^\}/, members).reduce(function(obj, pair) {
     obj[pair[1]] = pair[3];
@@ -35,74 +39,25 @@ function elements() {
   return this.sepBy(value, /^,/);
 }
 
-function value() {
-  return this.choice(literal, string, number, array, object);
-}
-
 var LITERAL = { 'true': true, 'false': false, 'null': null };
 function literal() {
   return LITERAL[this.match(/^(true|false|null)/)];
 }
 
-var SPECIAL = { '"': 34, '\\': 92, '/': 47, 'b': 8, 'f': 12, 'n': 10, 'r': 13, 't': 9};
+var STRING = { '"': 34, '\\': 92, '/': 47, 'b': 8, 'f': 12, 'n': 10, 'r': 13, 't': 9};
 function string() {
   var chars = this.match(/^"((?:\\["\\/bfnrt]|\\u[0-9a-fA-F]{4}|[^"\\])*)"/);
   return chars.replace(/\\(["\\/bfnrt])|\\u([0-9a-fA-F]{4})/g, function(_, $1, $2) {
-    return String.fromCharCode($1 ? SPECIAL[$1] : hex($2));
+    return String.fromCharCode($1 ? STRING[$1] : parseInt($2, 16));
   });
 }
 
 function number() {
-  var ipart = this.produce(integer),
-      fpart = this.option(frac, 0),
-      epart = this.option(exp, 0);
-  return ((ipart < 0) ? ipart - fpart : ipart + fpart) * Math.pow(10, epart);
-}
-
-function integer() {
-  return (this.option(/^\-/) ? -1 : 1) * this.produce(digits);
-}
-
-function digits() {
-  return iPart(this.match(/^\d+/));
-}
-
-function frac() {
-  return fPart(this.match(/^\.(\d+)/));
-}
-
-function exp() {
-  var sign = (this.match(/^e([\+\-]?)/i) == '-') ? -1 : 1;
-  return sign * this.produce(digits);
+  return parseFloat(this.match(/^\-?\d+(?:\.\d+)?(?:[eE][\+\-]?\d+)?/));
 }
 
 
 /// --- Aux
-
-function iPart(digits) {
-  for (var i = 0, l = digits.length, r = 0; i < l; i++)
-    r = r * 10 + digits.charCodeAt(i) - 48;
-  return r;
-}
-
-function fPart(digits) {
-  for (var i = 0, l = digits.length, s = 10, r = 0; i < l; i++, s *= 10)
-    r += ((digits.charCodeAt(i) - 48) / s);
-  return r;
-}
-
-function hex(digits) {
-  var result = 0,
-      code;
-
-  digits = digits.toUpperCase();
-  for (var i = 0, l = digits.length; i < l; i++) {
-    code = digits.charCodeAt(i);
-    result = result * 16 + code - (code >= 65 ? 55 : 48);
-  }
-
-  return result;
-}
 
 function capture(stream, encoding, fn) {
   var data = '';
