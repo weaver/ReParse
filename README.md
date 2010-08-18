@@ -154,14 +154,14 @@ Return an array of one or more values produced by `method`.  Each
 value is separated by `sep` and the entire sequence is optionally
 terminated by `sep`.
 
-#### .chainl(method, op, otherwise) ####
+#### .chainl(method, op, [otherwise]) ####
 
-Parse zero or more values produced by `method` and separated by `op`.
-Returns a value obtained by left associative application of functions
-returned by `op`.  This can be used to eliminate direct
-left-recursion.
+This can be used to eliminate direct left-recursion.  Parse zero or
+more values produced by `method` and separated by `op`.  Returns a
+value obtained by left associative application of functions returned
+by `op`.  If zero values are produced, return otherwise.
 
-#### .chainl1(method, op, otherwise) ####
+#### .chainl1(method, op) ####
 
 Like `.chainl`, but at least one value must be produced by `method`.
 For example, this grammar:
